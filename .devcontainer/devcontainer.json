@@ -1,0 +1,66 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.231.6/containers/jekyll
+{
+	"name": "epoch-site",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			// Update 'VARIANT' to pick a Debian OS version: bullseye, buster
+			// Use bullseye when on local arm64/Apple Silicon.
+			"VARIANT": "bullseye",
+			// Enable Node.js: pick the latest LTS version
+			"NODE_VERSION": "lts/*",
+			"HTTP_PROXY": "${localEnv:HTTP_PROXY}",
+		}
+	},
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"terminal.integrated.profiles.linux": {
+			"bash": {
+				"path": "/bin/bash"
+			}
+		},
+		"terminal.integrated.defaultProfile.linux": "bash",
+	},
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"donjayamanne.githistory",
+		"eamodio.gitlens",
+		"mhutchie.git-graph",
+		"hediet.vscode-drawio",
+		"nopeslide.vscode-drawio-plugin-mermaid",
+	],
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [
+		// Jekyll server
+		4000,
+		// Live reload server
+		35729
+	],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"onCreateCommand": "bash /tmp/install_talisman.bash",
+	"postCreateCommand": "jekyll serve --force_polling",
+	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	// "remoteUser": "root"
+	"workspaceMount": "source=${localWorkspaceFolder},target=/srv/jekyll,type=bind",
+	"mounts": [
+		"source=/root/.netrc,target=/root/.netrc,type=bind",
+		"source=/root/.gitconfig,target=/root/.gitconfig,type=bind",
+		"source=/usr/share/pki/ca-trust-source/anchors/ZscalerRootCertificate.cer,target=/etc/ssl/certs/ca-certificates.crt,type=bind",
+	],
+	"workspaceFolder": "/srv/jekyll",
+	"containerEnv": {
+		"JEKYLL_GID": "1000",
+		"JEKYLL_UID": "1000",
+		"JEKYLL_VAR_DIR": "/var/jekyll",
+		"LANG": "en_US.UTF-8",
+		"HTTP_PROXY": "${localEnv:HTTP_PROXY}",
+		"http_proxy": "${localEnv:HTTP_PROXY}",
+		"HTTPS_PROXY": "${localEnv:HTTP_PROXY}",
+		"https_proxy": "${localEnv:HTTP_PROXY}",
+		"NO_PROXY": "localhost,127.0.0.1",
+		"no_proxy": "localhost,127.0.0.1",
+		"SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt",
+		"SSL_CERT_DIR": "/etc/ssl/certs",
+	},
+}

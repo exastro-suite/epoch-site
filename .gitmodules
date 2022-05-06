@@ -1,0 +1,8 @@
+[submodule "docs"]
+	path = docs
+	url = https://github.com/exastro-suite/docs.git
+	branch = master
+[submodule "epoch-docs"]
+	path = epoch-docs
+	url = https://github.com/exastro-suite/epoch-docs.git
+	branch = master
